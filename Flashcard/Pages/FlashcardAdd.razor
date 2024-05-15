@@ -1,0 +1,57 @@
+﻿@page "/cardadd"
+@using FlashcardLibrary.Models
+@using FlashcardLibrary.Data
+@using Flashcard.Services
+@using Flashcard
+
+@inject IFlashcardService _db
+
+<h3>Add new Flashcard</h3>
+
+<EditForm Model="@card">
+    <label>flashcard_set_name</label>
+    <InputText @bind-Value="card.flashcard_set_name" />
+    <br /><br />
+
+    <label>flashcard_number</label>
+    <InputNumber @bind-Value="card.flashcard_number" />
+    <br /><br />
+
+    <label>front_side</label>
+    <InputText @bind-Value="card.front_side" />
+    <br /><br />
+
+    <label>front_image</label>
+    <InputText @bind-Value="card.front_image" />
+    <br /><br />
+
+    <label>back_side</label>
+    <InputText @bind-Value="card.back_side" />
+    <br /><br />
+
+    <label>back_image</label>
+    <InputText @bind-Value="card.back_image" />
+    <br /><br />
+
+
+
+
+</EditForm>
+
+<a href="/flashcardlist">
+    <button class="btn btn-outline-primary" @onclick="AddFlashcard">Add Flashcard</button>
+</a>
+
+
+@code {
+    FlashcardModel card = new FlashcardModel();
+
+    async Task AddFlashcard()
+    {
+        await _db.AddFlashcard(card);
+    }
+
+
+}
+
+

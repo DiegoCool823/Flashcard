@@ -1,0 +1,60 @@
+﻿@page "/editcard/{id}"
+@using FlashcardLibrary.Models
+@using FlashcardLibrary.Data
+@using Flashcard.Services
+@using Flashcard
+@inject IFlashcardService _db
+
+
+
+<h3>Flashcard Edit</h3>
+<EditForm Model="@card">
+
+    <label for="flashcard_set_name">flashcard_set_name</label>
+    <InputText @bind-Value="card.flashcard_set_name" />
+    <br /><br />
+
+    <label for="flashcard_number">flashcard_number</label>
+    <InputNumber @bind-Value="card.flashcard_number" />
+    <br /><br />
+
+    <label for="front_side">front_side</label>
+    <InputText @bind-Value="card.front_side" />
+    <br /><br />
+
+    <label for="front_image">front_image</label>
+    <InputText @bind-Value="card.front_image" />
+    <br /><br />
+
+    <label for="back_side">back_side</label>
+    <InputText @bind-Value="card.back_side" />
+    <br /><br />
+
+    <label for="back_image">back_image</label>
+    <InputText @bind-Value="card.back_image" />
+    <br /><br />
+
+
+
+</EditForm>
+<a href="/flashcardlist">
+    <button class="btn btn-primary" @onclick="SaveChanges">Save Changes</button>
+</a>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+
+    FlashcardModel card = new FlashcardModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        int cardID = Int32.Parse(id);
+        card = await _db.GetFlashcardByID(cardID);
+    }
+
+    public async Task SaveChanges()
+    {
+        await _db.SaveFlashCard(card);
+    }
+}

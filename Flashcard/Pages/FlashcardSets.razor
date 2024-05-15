@@ -1,0 +1,56 @@
+﻿@page "/flashcardSets"
+@using FlashcardLibrary.Models
+@using Flashcard.Services
+@using Flashcard.Components
+@using Flashcard
+@using FlashcardLibrary.Data
+
+@inject IFlashcardService _db
+
+
+
+
+
+
+<h3>Flashcard Sets</h3>
+
+@if(fcSet==null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table"> 
+        <thead>
+            <tr>
+                
+                <th>set_name</th>
+                <th>card_amount</th>
+            </tr>
+            </thead>
+        <tbody>
+            @foreach(var fc in fcSet)
+            {
+                <tr>
+                    
+                    <td>@fc.set_name</td>
+                    <td>@fc.card_amount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+
+}
+
+@code{
+    List<FlashcardSetModel> fcSet; //= new List<FlashcardSetModel>();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        fcSet = await _db.LoadFlashcardList();
+    }
+
+
+}

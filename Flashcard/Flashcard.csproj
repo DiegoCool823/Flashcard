@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="_Data\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="MySql.Data" Version="8.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FlashcardLibrary\FlashcardLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="FlashcardLibrary">
+      <HintPath>..\FlashcardLibrary\bin\Debug\net8.0\FlashcardLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,97 @@
+﻿@page "/flashcardList"
+@using FlashcardLibrary.Models
+@using Flashcard.Services
+@using Flashcard.Components
+@using Flashcard
+
+@inject IFlashcardService _db
+
+<h3>Flashcard List</h3>
+<a href="/cardadd">
+    <button class="btn btn-secondary" >Add New Flashcard</button>
+    </a>
+
+@if(cards==null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table"> 
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>flashcard_set</th>
+                <th>flashcard_number</th>
+                <th>front_side</th>
+                <th>front_image</th>
+                <th>back_side</th>
+                <th>back_image</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var card in cards)
+            {
+                <tr>
+                    <td>@card.ID</td>
+                    <td>@card.flashcard_set_name</td>
+                    <td>@card.flashcard_number</td>
+                    <td>@card.front_side</td>
+                    <td>@card.front_image</td>
+                    <td>@card.back_side</td>
+                    <td>@card.back_image</td>
+                    <td><a href="/editcard/@card.ID">Edit</a></td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" @onclick="() => OpenDeleteDialog(card)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if(DeleteDialogOpen)
+{
+<ModalDialog Title="Are you sure?" Text="@msg"
+OnClose="@OnDeleteDialogClose" DialogType="ModalDialog.ModalDialogType.DeleteCancel"></ModalDialog>
+}
+@code {
+    public bool DeleteDialogOpen { get; set; }
+    FlashcardModel cardToDelete;
+    string msg = "Do you want to delete flashcard: ";
+    List<FlashcardModel> cards;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        cards = await _db.GetAllFlashcards();
+    }
+
+    private async void OnDeleteDialogClose(bool accepted)
+    {
+        if(accepted)
+        {
+            await _db.RemoveFlashcard(cardToDelete);
+            await LoadData();
+            cardToDelete = null;
+        }
+
+        DeleteDialogOpen = false;
+
+        StateHasChanged();
+    }
+
+    private void OpenDeleteDialog(FlashcardModel card)
+    {
+        msg = "Do you want to delete flashcard: ";
+        DeleteDialogOpen = true;
+        cardToDelete = card;
+        msg += card;
+        StateHasChanged();
+    }
+}
+
